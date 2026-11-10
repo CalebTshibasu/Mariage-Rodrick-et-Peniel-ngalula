@@ -3,13 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Rodrick et Peniel vous invitent à leur mariage le 13 décembre 2026 à Mbujimayi.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="INVITATION — Mariage de Rodrick &amp; Peniel">
-<meta property="og:description" content="Ouvrez votre invitation et confirmez votre présence.">
-<meta property="og:image" content="https://mariagerodrickpeniel.vercel.app/og.jpg">
-<meta property="og:image:width" content="800"><meta property="og:image:height" content="800">
 <title>Rodrick & Peniel — Invitation de mariage</title>
+<meta name="description" content="Vous êtes invité(e) au mariage de Rodrick et Peniel, le 13 décembre 2026 à Mbujimayi. Ouvrez l’invitation et confirmez votre présence.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:site_name" content="Rodrick & Peniel">
+<meta property="og:title" content="INVITATION Mariage Rodrick & Peniel">
+<meta property="og:description" content="13 décembre 2026 · Mbujimayi. Ouvrez l’invitation et confirmez votre présence.">
+<meta property="og:image" content="https://mariage-rodrickmputu-penielngalula.vercel.app/preview.jpg">
+<meta property="og:image:width" content="600">
+<meta property="og:image:height" content="600">
+<meta property="og:url" content="https://mariage-rodrickmputu-penielngalula.vercel.app/">
+<meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Jost:wght@300;400&family=Playfair+Display:wght@400;500&family=Pinyon+Script&display=swap">
 <style>
 :root{--bg:#1b1214;--fg:#f1e8dc;--muted:#b9a89a;--line:#3d2a2e;--card:#251a1d;--accent:#d8bd8a;--onaccent:#1b1214;
@@ -142,7 +147,6 @@ body:not(.opened) #hero .lead,body:not(.opened) #hero .names{opacity:0}
 .openbtn{letter-spacing:.12em;font-size:.95rem;line-height:1.4;animation:pulse 2.2s ease-in-out infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(216,189,138,.5)}50%{box-shadow:0 0 0 12px rgba(216,189,138,0)}}
 @media (prefers-reduced-motion:reduce){.openbtn{animation:none}}
-.tabl{margin-top:.8rem;font-family:Jost,system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;font-size:.9rem;color:var(--accent)}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -162,7 +166,7 @@ body:not(.opened) #hero .lead,body:not(.opened) #hero .names{opacity:0}
 <h1 class="names">Rodrick Mputu<span class="amp">&</span>Peniel Ngalula</h1>
 </header>
 <main>
-<section id="guest" class="rv off"><div class="guestcard"><small>Invitation personnelle</small><b id="guest-name"></b><p class="muted">Rodrick et Peniel sont heureux de vous compter parmi leurs invités.</p><p class="tabl" id="guest-table" hidden></p><p class="hint" id="guest-exp" hidden></p></div></section>
+<section id="guest" class="rv off"><div class="guestcard"><small>Invitation personnelle</small><b id="guest-name"></b><p class="muted">Rodrick et Peniel sont heureux de vous compter parmi leurs invités.</p></div></section>
 <section id="sdate" class="rv sd"><h2>Save the date</h2><div class="orn2"><i></i></div><p class="bigd"><b>13</b><span>décembre<br>2026</span></p><p class="muted">Dimanche</p><p class="cdl">Compte à rebours</p><div class="count" id="count" aria-live="off"><div><b id="d">–</b><span>jours</span></div><div><b id="h">–</b><span>heures</span></div><div><b id="m">–</b><span>min</span></div><div><b id="s">–</b><span>sec</span></div></div></section>
 <section id="lieu" class="rv"></section>
 <section id="prog" class="rv" hidden></section>
@@ -238,17 +242,17 @@ var $=function(i){return document.getElementById(i)};
 var db=null,user=null,uid=null,mine=null,all=[],draft=null;
 var DATE_TXT='Dimanche 13 décembre 2026';
 var INVITES={};
-function titleSlug(s){s=s.toLowerCase();if(INVITES[s])return INVITES[s];return s.split('-').filter(Boolean).map(function(w){return w.charAt(0).toUpperCase()+w.slice(1)}).join(' ')}
-function guestName(h){if(h.indexOf('#invite-')===0)return titleSlug(h.slice(8));
-var p='';try{p=decodeURIComponent(location.pathname)}catch(e){p=location.pathname}
-p=p.replace(/^\/+|\/+$/g,'').split('/').pop();if(!p||/\.html?$/i.test(p))return '';return titleSlug(p)}
-function fillExtra(){var q=new URLSearchParams(location.search),t=q.get('table'),e=q.get('exp'),te=$('guest-table'),ee=$('guest-exp'),ok=false;
-te.hidden=!t;if(t)te.textContent='Votre table : '+t;
-if(e){var d=new Date(e+'T23:59:59');if(!isNaN(d)){ee.textContent='Merci de confirmer votre présence avant le '+d.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})+'.';ok=true}}ee.hidden=!ok}
+function pretty(s){return s.split('-').filter(Boolean).map(function(w){return w.charAt(0).toUpperCase()+w.slice(1)}).join(' ')}
+function guestName(h){var s='';
+if(h.indexOf('#invite-')===0)s=h.slice(8).toLowerCase();
+else{try{var q=new URLSearchParams(location.search).get('nom');if(q)return q}catch(e){}
+var p=decodeURIComponent(location.pathname).split('/').filter(Boolean).pop()||'';
+if(p&&p.indexOf('.')<0)s=p.toLowerCase()}
+if(!s)return '';if(INVITES[s])return INVITES[s];return pretty(s)}
 function route(){var h=location.hash,v='inv';
 if(h==='#reservation'||h.indexOf('#verif-')===0)v='res';else if(h==='#billet')v='res';
 [['hero','inv'],['sdate','inv'],['lieu','inv'],['prog','inv'],['dress','inv'],['galerie','inv'],['appel','inv'],['rsvp','res'],['ticket','bil']].forEach(function(x){$(x[0]).classList.toggle('off',x[1]!==v)});
-var gn=guestName(h);$('guest-name').textContent=gn;fillExtra();$('guest').classList.toggle('off',v!=='inv'||!gn);
+var gn=guestName(h);$('guest-name').textContent=gn;$('guest').classList.toggle('off',v!=='inv'||!gn);
 if(gn&&!$('nom').value)$('nom').value=gn;
 if(v==='bil')drawTicket();
 if(h.indexOf('#verif-')===0){$('vcode').value=h.slice(7);verify()}
@@ -279,14 +283,13 @@ draft={nom:nom,ok:form.ok.value,msg:$('msg').value.trim().slice(0,400)};
 $('recaptxt').textContent=draft.nom+' — '+(draft.ok==='oui'?'je serai présent(e)':'je ne pourrai pas être présent(e)')+(draft.msg?' · Message : '+draft.msg:'')+'.';
 form.hidden=true;$('recap').hidden=false;show(err2,'')});
 $('back').addEventListener('click',function(){$('recap').hidden=true;form.hidden=false});
-var WA_NUMBER='';/* <-- mets ici le numéro WhatsApp qui reçoit les réponses, au format international sans + ni espaces (ex. 243812345678) */
-$('ok').addEventListener('click',function(){
-if(!WA_NUMBER){show(err2,'L’envoi n’est pas encore configuré. Contactez directement les mariés.');return}
-var t=new URLSearchParams(location.search).get('table');
-var m='Bonjour, c’est '+draft.nom+'. '+(draft.ok==='oui'?'Je confirme ma présence au mariage de Rodrick et Peniel.':'Je ne pourrai malheureusement pas être présent(e) au mariage de Rodrick et Peniel.')+(t?' (Table : '+t+')':'')+(draft.msg?'\n\nMon message de vœux : '+draft.msg:'');
-window.open('https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(m),'_blank');
-$('recap').hidden=true;$('thanks-t').textContent=draft.ok==='oui'?'Merci ! Votre réponse est prête dans WhatsApp : appuyez sur Envoyer pour la transmettre à Rodrick et Peniel.':'Merci de nous avoir prévenus. Appuyez sur Envoyer dans WhatsApp pour transmettre votre réponse à Rodrick et Peniel.';$('thanks').hidden=false});
-var BASE='https://claude.ai/artifact/Bnx7GXe3x1RvujYFVjdHZ1';
+$('ok').addEventListener('click',async function(){
+if(!db||!uid){show(err2,'L’enregistrement n’est pas disponible depuis cet appareil. Contactez directement les mariés.');return}
+var b=$('ok');b.disabled=true;var d=Object.assign({},draft,{at:new Date().toISOString()});
+try{await db.collection('rsvp').doc(uid).set(d);mine=d;$('recap').hidden=true;
+$('thanks-t').textContent=d.ok==='oui'?'Merci ! Votre présence est confirmée. Rodrick et Peniel ont bien reçu votre message.':'Merci de nous avoir prévenus. Rodrick et Peniel ont bien reçu votre réponse et votre message.';$('thanks').hidden=false}
+catch(x){b.disabled=false;show(err2,'La réservation n’a pas pu être enregistrée. Réessayez dans un instant.')}});
+var BASE=location.href.split('#')[0];
 function slug(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')}
 $('gbtn').addEventListener('click',function(){var n=$('gname').value.trim();if(!n)return;var link=BASE+'#invite-'+slug(n);
 var t=n+', ceci est votre invitation. Cliquez sur le lien ci-dessous pour l’ouvrir et confirmer votre présence\n👇👇👇\n\n'+link;
